@@ -1,0 +1,48 @@
+﻿@model AircraftLore.Models.AircraftViewModel
+@{
+    ViewData["Title"] = "Aircraft";
+}
+<form asp-controller="Home" asp-action="Aircraft" method="get">
+    <p>
+        <!--
+        <select asp-for="CategoryString" asp-items="Model.Categories">
+            <option value="">All</option>
+        </select>
+            -->
+        <select asp-for="CountryString" asp-items="Model.Countries">
+            <option value="">All</option>
+        </select>
+        Aircraft Model: <input type="text" asp-for="ModelString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<div style="font-size: 0;">
+    @{
+        var total = 100.0f / (float)Model.Categories.ToList().Count;
+        foreach (var item in Model.Categories){
+            if (item.Text == Model.CategoryString){
+        <div id="button-header-@(item.Text)" class="table-top-header blue" style="width: @(total)%;" type="button">@(item.Text)</div>
+            }else{
+        <div id="button-header-@(item.Text)" class="table-top-header light-blue" style="width: @(total)%;" type="button" onclick="@("location.href='"+ Url.Action("Home","Aircraft")+ "?CategoryString=" + item.Text + "'")">@(item.Text)</div>
+            }
+        }
+    }
+</div>
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.Aircrafts){
+        <tr>
+            <td>@(Html.DisplayFor(modelItem => item.ModelName))</td>
+            <td>@(Html.DisplayFor(modelItem => item.Description))</td>
+            <td>
+                <img width="250" height="150" src="../assets/images/aircraft/@(Html.DisplayFor(modelItem => item.PictureFile))" alt="@(Html.DisplayFor(modelItem => item.PictureFile))" />
+            </td>
+
+            <td>
+                <img class="border-1-solid-black" width="150" src="../assets/images/flags/@(Html.DisplayFor(modelItem => item.Country)).jpg" alt="@(Html.DisplayFor(modelItem => item.Country))" />
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
